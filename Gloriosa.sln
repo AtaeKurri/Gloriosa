@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gloriosa", "Gloriosa.csproj", "{3FE9EDC8-90B6-46DC-A014-75F2EF04A0DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TotMR_Sharp", "..\..\..\..\Myara Games\TotMR_Sharp\TotMR_Sharp.csproj", "{E286FB18-9C5D-447F-A5A6-82F998EF0336}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3FE9EDC8-90B6-46DC-A014-75F2EF04A0DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FE9EDC8-90B6-46DC-A014-75F2EF04A0DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FE9EDC8-90B6-46DC-A014-75F2EF04A0DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FE9EDC8-90B6-46DC-A014-75F2EF04A0DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E286FB18-9C5D-447F-A5A6-82F998EF0336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E286FB18-9C5D-447F-A5A6-82F998EF0336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E286FB18-9C5D-447F-A5A6-82F998EF0336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E286FB18-9C5D-447F-A5A6-82F998EF0336}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1106C29F-63C6-4DDF-83F8-709612556565}
+	EndGlobalSection
+EndGlobal

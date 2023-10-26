@@ -1,0 +1,17 @@
+﻿Gloriosa est un framework basé en C# pouvant être utilisé pour créer un danmaku de toute pièce.
+
+L'idée principale: Tout GameObject appartient à un monde séparé et aucun GameObject ne peut interragir avec d'autres mondes.
+Il peut exister des GameObject qui n'appartiennent pas à un monde, mais ils n'ont aucune collision et fonctionnalité de monde.
+
+Le framework se comporte comme ça :
+- Initialisation de la fenêtre et de tout le moteur.
+- Une fois initialisé, AppFrame invoke un event, laissant le dev utiliser le framework normalement.
+
+
+Le framework comporte la possibilité de créer des Worlds (aucun maximum), définir leur dimensions séparément
+Créer des menus, principalement fait pour le menu d'accueil mais fonctionne aussi pour les menus de pause et tout.
+Créer des gameobjects et définir leur comportement avec les fonctions overridables.
+Une class Player de base mais optionnelle, mais avec une interface pour les fonctions et valeurs nécessaire d'un joueur.
+
+
+Permettre un Wrapper entier pour toutes les fonctions de l'api et des facilités pour Render et tout
