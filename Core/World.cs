@@ -16,13 +16,13 @@ namespace Gloriosa.Core
         public Vector4 worldBounds;
         public Vector4 worldSize;
 
-        public World(int _worldID, Vector4 _worldSize) : this(_worldID)
+        public World(Vector4 _worldSize, int _worldID= 0) : this(_worldID)
         {
             worldSize = _worldSize;
             // Gérer un world avec un worldID et les paramètres de taille. Prend les param de taille par défaut si pas spécifiés.
         }
 
-        public World(int _worldID)
+        public World(int _worldID=0)
         {
             if (WORLDS.Find(w => w.worldID == _worldID) != null)
                 return;

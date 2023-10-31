@@ -14,7 +14,9 @@ namespace Gloriosa.Core
         private World? parentWorld;
 
         private List<GameObject> m_Pool;
+        public List<GameObject> rPool;
         private uint nextUid = 0;
+        private float nextLayer = 0.0f;
 
         public bool isProcessingFrame = false;
         public bool isRendering = false;
@@ -47,26 +49,17 @@ namespace Gloriosa.Core
             }
             isProcessingFrame = false;
         }
-
-        public void DoRender()
+        public void DoRender(RenderModes renderMode)
         {
             isRendering = true;
-            // Assume the pool is already sorted by the override when using this function.
-            // So, don't sort it.
-            //m_Pool.Sort((obj1, obj2) => obj1.layer.CompareTo(obj2.layer));
-            foreach (GameObject gm in m_Pool)
+            foreach (GameObject gm in m_Pool.FindAll(x => x.renderMode == renderMode && !x.hide))
                 gm.Render();
             isRendering = false;
         }
 
-        public void DoRender(bool topRendering)
+        public void SortPool()
         {
-            isRendering = true;
-            if (!topRendering) // Assume the pool is already sorted by the first call of this function.
-                m_Pool.Sort((obj1, obj2) => obj1.layer.CompareTo(obj2.layer));
-            foreach (GameObject gm in m_Pool.FindAll(x => x.onTop == topRendering && !x.hide))
-                gm.Render();
-            isRendering = false;
+            m_Pool.OrderBy(x => x.renderMode).ThenBy(x => x.baseLayer).ThenBy(x => x.layer);
         }
 
         public void NewGameObject(GameObject gm)
@@ -74,9 +67,11 @@ namespace Gloriosa.Core
             if (nextUid == objectLimit)
                 return;
             gm.uid = nextUid;
+            gm.layer = (int)gm.baseLayer + nextLayer;
             m_Pool.Add(gm);
             gm.Init();
             nextUid++;
+            nextLayer += 0.001f;
         }
 
         /// <summary>

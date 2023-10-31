@@ -1,4 +1,5 @@
 ﻿using Gloriosa.Core;
+using Gloriosa.IO;
 using Gloriosa.Utility;
 using Raylib_CsLo;
 using Serilog;
@@ -28,11 +29,11 @@ namespace Gloriosa
         public bool isRunning = false;
         private bool isReady = false;
         public GameSettings m_Settings = new GameSettings();
-        public RenderTexture target;
+        public RenderTexture target = new RenderTexture();
         private Camera2D screenCamera2D = new Camera2D();
         private Camera2D worldCamera2D = new Camera2D();
+        private Camera3D BGCamera3D = new Camera3D();
 
-        private readonly Vector2 virtualSize = new Vector2(853, 480);
         private float virtualRatio = 0.0f;
         private Rectangle sourceRect;
         private Rectangle destRect;
@@ -62,15 +63,23 @@ namespace Gloriosa
             m_Settings.windowTitle = windowTitle;
         }
 
+        public static List<World> getWorlds()
+        {
+            return WORLDS;
+        }
+
+        public static Scoredata getScoredata()
+        {
+            return SCORE;
+        }
+
         public void Init()
         {
+            Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT | ConfigFlags.FLAG_VSYNC_HINT);
             Raylib.InitWindow((int)m_Settings.canvasSize.X, (int)m_Settings.canvasSize.Y, m_Settings.windowTitle);
             Raylib.SetTargetFPS(60);
 
-            virtualRatio = (float)m_Settings.canvasSize.X / (float)virtualSize.X;
-            target = Raylib.LoadRenderTexture((int)virtualSize.X, (int)virtualSize.Y);
-            sourceRect = new Rectangle(0.0f, 0.0f, (float)target.texture.width, -(float)target.texture.height);
-            destRect = new Rectangle(-virtualRatio, -virtualRatio, m_Settings.canvasSize.X + (virtualRatio * 2), m_Settings.canvasSize.Y + (virtualRatio * 2));
+            SetVirtualSize(new Vector2(853, 480));
             ResetCamera();
 
             isReady = true;
@@ -95,6 +104,14 @@ namespace Gloriosa
             return isReady;
         }
 
+        public void SetVirtualSize(Vector2 virtualSize)
+        {
+            virtualRatio = (float)m_Settings.canvasSize.X / (float)virtualSize.X;
+            target = Raylib.LoadRenderTexture((int)virtualSize.X, (int)virtualSize.Y);
+            sourceRect = new Rectangle(0.0f, 0.0f, (float)target.texture.width, -(float)target.texture.height);
+            destRect = new Rectangle(-virtualRatio, -virtualRatio, m_Settings.canvasSize.X + (virtualRatio * 2), m_Settings.canvasSize.Y + (virtualRatio * 2));
+        }
+
         private void ResetCamera()
         {
             worldCamera2D.offset = new Vector2(0, 0);
@@ -114,9 +131,12 @@ namespace Gloriosa
 
             Raylib.BeginTextureMode(target);
             Raylib.ClearBackground(Raylib.BLACK);
-            Raylib.BeginMode2D(worldCamera2D);
             isInRenderScope = true;
-            DrawCamera();
+            Raylib.BeginMode3D(BGCamera3D);
+            DrawBackground();
+            Raylib.EndMode3D();
+            Raylib.BeginMode2D(worldCamera2D);
+            DrawWorlds();
             Raylib.EndMode2D();
             DrawUI();
             isInRenderScope = false;
@@ -138,14 +158,18 @@ namespace Gloriosa
             TPOOL.DoFrame();
         }
 
-        private void DrawCamera()
+        private void DrawBackground()
         {
-            TPOOL.DoRender(false);
+            TPOOL.DoRender(RenderModes.Background);
+        }
+
+        private void DrawWorlds()
+        {
             foreach (World world in WORLDS)
             {
-                world.objectPool.DoRender();
+                world.objectPool.DoRender(RenderModes.World);
             }
-            TPOOL.DoRender(true);
+            TPOOL.DoRender(RenderModes.UI);
         }
 
         private void DrawUI()

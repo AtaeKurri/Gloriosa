@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gloriosa", "Gloriosa.csproj", "{3FE9EDC8-90B6-46DC-A014-75F2EF04A0DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gloriosa", "Gloriosa.csproj", "{3FE9EDC8-90B6-46DC-A014-75F2EF04A0DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TotMR_Sharp", "..\..\..\..\Myara Games\TotMR_Sharp\TotMR_Sharp.csproj", "{E286FB18-9C5D-447F-A5A6-82F998EF0336}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TotMR_Sharp", "..\..\..\..\Myara Games\TotMR_Sharp\TotMR_Sharp.csproj", "{E286FB18-9C5D-447F-A5A6-82F998EF0336}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloriosaTests", "..\GloriosaTests\GloriosaTests.csproj", "{DC9E1F89-3487-4A6E-A431-77F5D78E4218}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E286FB18-9C5D-447F-A5A6-82F998EF0336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E286FB18-9C5D-447F-A5A6-82F998EF0336}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E286FB18-9C5D-447F-A5A6-82F998EF0336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC9E1F89-3487-4A6E-A431-77F5D78E4218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC9E1F89-3487-4A6E-A431-77F5D78E4218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC9E1F89-3487-4A6E-A431-77F5D78E4218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC9E1F89-3487-4A6E-A431-77F5D78E4218}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

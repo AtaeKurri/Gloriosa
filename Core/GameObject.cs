@@ -29,6 +29,24 @@ namespace Gloriosa.Core
         ITEM
     }
 
+    public enum GameObjectLayer
+    {
+        BACKGROUND = 0,
+        ENEMIES = 100,
+        PLAYER_BULLETS = 200,
+        PLAYER = 300,
+        ITEMS = 400,
+        ENEMY_BULLETS = 500,
+        TOPMOST = 600,
+    }
+
+    public enum RenderModes
+    {
+        Background,
+        World,
+        UI
+    }
+
     public class GameObject
     {
         public GameObjectStatus status = GameObjectStatus.Active;
@@ -45,7 +63,8 @@ namespace Gloriosa.Core
         public bool colliRect = false;
         public Vector2 colliAB = Vector2.Zero;
 
-        public int layer = 0;
+        public GameObjectLayer baseLayer = GameObjectLayer.ENEMIES;
+        public float layer = 0.0f;
         public Vector2 scale = Vector2.One;
         public float rot = 0f;
         public float omega = 0f;
@@ -61,6 +80,7 @@ namespace Gloriosa.Core
         public Texture? img = null;
 
         public bool worldScope = true;
+        public RenderModes renderMode;
         public GameObjectPool pool;
 
         /// <summary>
@@ -78,10 +98,10 @@ namespace Gloriosa.Core
         }
 
         /// <summary>
-        /// Creates a new GameObject instance. (World-Dependant)
+        /// Creates a new GameObject instance inside a world.
         /// </summary>
-        /// <param name="worldID">The worldID in which this object will live.</param>
-        public GameObject(int worldID)
+        /// <param name="worldID">The worldID in which this object will live. If not specified, will be 0.</param>
+        public GameObject(int worldID=0)
         {
             World? w = WORLDS.Find(w => w.worldID == worldID);
             if (w != null)
@@ -158,6 +178,15 @@ namespace Gloriosa.Core
         {
             Debug.Assert(r >= l && t >= b);
             return (XY.X >= l && XY.X <= r && XY.Y >= b && XY.Y <= t);
+        }
+
+        /// <summary>
+        /// Change the Render Mode of the object.
+        /// </summary>
+        /// <param name="rm"><see cref="RenderModes"/></param>
+        public void SetRenderMode(RenderModes rm)
+        {
+            renderMode = rm;
         }
     }
 }
