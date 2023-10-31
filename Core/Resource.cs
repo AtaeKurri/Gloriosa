@@ -11,11 +11,15 @@ namespace Gloriosa.Core
         public string name;
         public object resource;
 
-        public Resource(string _name, object _res)
+        // Gérer resource local ou globale.
+        public Resource(string _name, object _res, bool global=true)
         {
             name = _name;
             resource = _res;
-            RPOOL.Add(this);
+            if (global)
+                RPOOL.Add(this);
+            else
+                RPOOL.Add(this); // Créer ça dans la CURVIEW.
         }
 
         /// <summary>
@@ -23,8 +27,9 @@ namespace Gloriosa.Core
         /// </summary>
         /// <param name="resourceName">A string used for defining a resource.</param>
         /// <returns>The resource associated with the name. Null if it doesn't exist.</returns>
-        public static T? FindResource<T>(string resourceName)
+        public static T? FindResource<T>(string resourceName, bool global=true)
         {
+            // Si global est true, chercher dans la pool globale, sinon dans la pool de CURVIEW.
             var res = RPOOL.Find(x => x.name == resourceName && x.resource is T);
             return (T?)(res?.resource);
         }

@@ -42,3 +42,4 @@ La View est le contenant de tout ce qui est à render, ça peut être un menu, u
 
 Une View contient son propre pool de Resource, de GameObject, et gère sa propre logique d'Update.
 Charger une View kill (remplace) l'ancienne instance de l'ancienne View, libère toutes ses resources et Del tout les GameObjects.
+(Le Pool de resource d'une View est locale, il y a aussi un pool de resource global)
