@@ -11,6 +11,7 @@ Uhh...not now.
 
 ## Requirements
 * Windows 10 or 11 (not tested with the latter)
+* OpenGL compatible graphics card (if you're playing minecraft cheap clones it should be ok.)
 
 ## Build Requirements
 * Visual Studio 2019 (not tested) or 2022
