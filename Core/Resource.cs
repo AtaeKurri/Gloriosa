@@ -17,9 +17,9 @@ namespace Gloriosa.Core
             name = _name;
             resource = _res;
             if (global)
-                RPOOL.Add(this);
+                GPOOL.Add(this);
             else
-                RPOOL.Add(this); // Créer ça dans la CURVIEW.
+                CURVIEW.lPOOL.Add(this); // Créer ça dans la CURVIEW.
         }
 
         /// <summary>
@@ -30,8 +30,16 @@ namespace Gloriosa.Core
         public static T? FindResource<T>(string resourceName, bool global=true)
         {
             // Si global est true, chercher dans la pool globale, sinon dans la pool de CURVIEW.
-            var res = RPOOL.Find(x => x.name == resourceName && x.resource is T);
-            return (T?)(res?.resource);
+            if (global)
+            {
+                var res = GPOOL.Find(x => x.name == resourceName && x.resource is T);
+                return (T?)(res?.resource);
+            }
+            else
+            {
+                var res = CURVIEW.lPOOL.Find(x => x.name == resourceName && x.resource is T);
+                return (T?)(res?.resource);
+            }
         }
     }
 }

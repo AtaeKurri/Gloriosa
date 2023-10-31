@@ -48,9 +48,7 @@ namespace Gloriosa
                 throw new GameAlreadyRunningException("There is already a game instance running. Can't create new one.");
             isRunning = true;
             APP = this;
-            WORLDS = new List<World>();
-            RPOOL = new List<Resource>();
-            TPOOL = new GameObjectPool();
+            GPOOL = new List<Resource>();
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console()
@@ -65,7 +63,7 @@ namespace Gloriosa
 
         public static List<World> getWorlds()
         {
-            return WORLDS;
+            return CURVIEW.worlds;
         }
 
         public static Scoredata getScoredata()
@@ -136,7 +134,7 @@ namespace Gloriosa
             DrawBackground();
             Raylib.EndMode3D();
             Raylib.BeginMode2D(worldCamera2D);
-            DrawWorlds();
+            DrawView();
             Raylib.EndMode2D();
             DrawUI();
             isInRenderScope = false;
@@ -151,25 +149,21 @@ namespace Gloriosa
 
         private void Update()
         {
-            foreach (World world in WORLDS)
-            {
-                world.objectPool.DoFrame();
-            }
-            TPOOL.DoFrame();
+            if (CURVIEW != null)
+                CURVIEW.Frame();
         }
 
         private void DrawBackground()
         {
-            TPOOL.DoRender(RenderModes.Background);
+            //CURVIEW.RenderBackGround(RenderModes.Background);
+            if (CURVIEW != null)
+                CURVIEW.gOP.DoRender(RenderModes.Background);
         }
 
-        private void DrawWorlds()
+        private void DrawView()
         {
-            foreach (World world in WORLDS)
-            {
-                world.objectPool.DoRender(RenderModes.World);
-            }
-            TPOOL.DoRender(RenderModes.UI);
+            if (CURVIEW != null)
+                CURVIEW.Render();
         }
 
         private void DrawUI()

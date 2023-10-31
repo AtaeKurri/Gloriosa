@@ -1,4 +1,5 @@
 ﻿using Gloriosa.Core;
+using Raylib_CsLo.InternalHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,14 +32,24 @@ namespace Gloriosa.Views
             CURVIEW = this;
         }
 
-        private void Update()
+        public virtual void Init()
         {
 
         }
 
-        private void Render()
+        public virtual void Frame()
         {
+            foreach (World world in worlds)
+                world.objectPool.DoFrame();
+        }
 
+        internal void Render()
+        {
+            foreach (World world in worlds)
+            {
+                world.objectPool.DoRender(RenderModes.World);
+            }
+            gOP.DoRender(RenderModes.UI);
         }
     }
 }

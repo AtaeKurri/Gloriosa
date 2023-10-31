@@ -14,7 +14,7 @@ namespace Gloriosa.Core
     {
         Free,
         Active,
-        Dead,
+        Deleted,
         Killed
     }
 
@@ -81,35 +81,27 @@ namespace Gloriosa.Core
 
         public bool worldScope = true;
         public RenderModes renderMode;
-        public GameObjectPool pool;
-
-        /// <summary>
-        /// Creates a new GameObject instance living outside of a world.
-        /// Will render on top of the worlds.
-        /// </summary>
-        /// <param name="onTop">If true, will always render on top of the worlds. If false, before the worlds.
-        /// This can be changed at runtime with the <see cref="onTop"/> parameter.</param>
-        public GameObject(bool onTop)
-        {
-            // Create the GameObject outside of a world scope, will always be rendered on top of the worlds.
-            pool = TPOOL;
-            pool.NewGameObject(this);
-            worldScope = false;
-        }
 
         /// <summary>
         /// Creates a new GameObject instance inside a world.
         /// </summary>
+        /// <param name="_renderMode">If <see cref="RenderModes.UI"/>, will ignore <paramref name="worldID"/>.</param>
         /// <param name="worldID">The worldID in which this object will live. If not specified, will be 0.</param>
-        public GameObject(int worldID=0)
+        public GameObject(RenderModes _renderMode, int worldID=0)
         {
-            World? w = WORLDS.Find(w => w.worldID == worldID);
-            if (w != null)
+            renderMode = _renderMode;
+            if (renderMode == RenderModes.UI)
             {
-                pool = w.objectPool;
-                pool.NewGameObject(this);
+                CURVIEW.gOP.NewGameObject(this);
+                worldScope = false;
             }
-            worldScope = true;
+            else
+            {
+                World? w = CURVIEW.worlds.Find(w => w.worldID == worldID);
+                if (w != null)
+                    w.objectPool.NewGameObject(this);
+                worldScope = true;
+            }
         }
 
         public virtual void Init()
@@ -127,28 +119,39 @@ namespace Gloriosa.Core
                 return;
 
             rot += omega;
-            if (!pool.BoundCheck(this))
+            if (worldScope)
             {
-                Del();
-                return;
+                if (!CURVIEW.worlds[world].objectPool.BoundCheck(this))
+                {
+                    Del();
+                    return;
+                }
             }
             UpdateTimer();
         }
 
         public virtual void Del()
         {
-            if (status != GameObjectStatus.Active)
+            if (DoDelKill(GameObjectStatus.Deleted))
                 return;
-            status = GameObjectStatus.Dead;
-            pool.RemoveObject(this);
         }
 
         public virtual void Kill()
         {
-            if (status != GameObjectStatus.Active)
+            if (DoDelKill(GameObjectStatus.Killed))
                 return;
-            status = GameObjectStatus.Killed;
-            pool.RemoveObject(this);
+        }
+
+        private bool DoDelKill(GameObjectStatus stat)
+        {
+            if (status != GameObjectStatus.Active)
+                return false;
+            status = stat;
+            if (renderMode == RenderModes.UI)
+                CURVIEW.worlds[world].objectPool.RemoveObject(this);
+            else
+                CURVIEW.gOP.RemoveObject(this);
+            return true;
         }
 
         /// <summary>
