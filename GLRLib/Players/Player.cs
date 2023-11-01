@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gloriosa.Players
+namespace Gloriosa.GLRLib.Players
 {
+    /// <summary>
+    /// Inherit this if you wanna make a custom player.
+    /// </summary>
     public interface IPlayer
     {
         public string playerName { get; }

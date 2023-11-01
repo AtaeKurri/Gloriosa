@@ -15,7 +15,8 @@ namespace Gloriosa
     public struct GameSettings
     {
         public Vector2 canvasSize = new Vector2(1600, 900);
-        public string windowTitle = "Gloriosa | v1.00";
+        public Vector2 virtualSize = new Vector2(853, 480);
+        public string windowTitle = "Gloriosa v1.0.0";
 
         public GameSettings()
         {
@@ -24,6 +25,10 @@ namespace Gloriosa
 
     public delegate void EventHandler(AppFrame appf);
 
+    /// <summary>
+    /// Base game class. A game must create a single instance of this class.
+    /// The main game loop will be handled by this class.
+    /// </summary>
     public sealed class AppFrame
     {
         public bool isRunning = false;
@@ -56,11 +61,6 @@ namespace Gloriosa
                 .CreateLogger();
         }
 
-        public AppFrame(string windowTitle) : this()
-        {
-            m_Settings.windowTitle = windowTitle;
-        }
-
         public static List<World> getWorlds()
         {
             return CURVIEW.worlds;
@@ -77,7 +77,7 @@ namespace Gloriosa
             Raylib.InitWindow((int)m_Settings.canvasSize.X, (int)m_Settings.canvasSize.Y, m_Settings.windowTitle);
             Raylib.SetTargetFPS(60);
 
-            SetVirtualSize(new Vector2(853, 480));
+            SetVirtualSize(m_Settings.virtualSize);
             ResetCamera();
 
             isReady = true;

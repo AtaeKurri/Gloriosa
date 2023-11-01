@@ -1,5 +1,4 @@
-﻿using Gloriosa;
-using Gloriosa.Core;
+﻿using Gloriosa.Core;
 using Gloriosa.IO;
 using Gloriosa.Views;
 using System;

@@ -6,6 +6,14 @@ It still is in an early development phase and is not meant to be used for full g
 A game made with Gloriosa works with a "View" workflow. Think of Views as Godot's or Unity's scenes.<br>
 A View has a collection of "Game Objects", Resources (textures, images, sound, music, ...) and worlds.
 
+## GLRLib
+GLRLib is a premade library to help developers make a quick game without coding to much stuff.<br>
+It offers a lot of premade stuff like a boss and player system, bullets, items, etc...<br>
+If you are familiar with LuaSTG, it's pretty much the same thing as THlib.<br>
+
+You are free to use GLRLib inside your projects, but can completely ignore it or take parts of it.<br>
+If you want to make your own systems, go for it, GLRLib is purely for convenience.
+
 ## Download and Install
 Uhh...not now.
 
