@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Gloriosa.Exceptions
 {
-    public class GameAlreadyRunningException : Exception
+    public class UnknownWorldException : Exception
     {
-        public GameAlreadyRunningException()
+        public UnknownWorldException()
         {
         }
 
-        public GameAlreadyRunningException(string message)
+        public UnknownWorldException(string message)
             : base(message)
         {
         }
 
-        public GameAlreadyRunningException(string message, Exception inner)
+        public UnknownWorldException(string message, Exception inner)
             : base(message, inner)
         {
         }

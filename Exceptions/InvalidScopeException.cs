@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gloriosa.Utility
+namespace Gloriosa.Exceptions
 {
     public class InvalidScopeException : Exception
     {

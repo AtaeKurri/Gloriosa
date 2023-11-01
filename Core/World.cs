@@ -16,7 +16,7 @@ namespace Gloriosa.Core
         public Vector4 worldBounds;
         public Vector4 worldSize;
 
-        public World(Vector4 _worldSize, int _worldID= 0) : this(_worldID)
+        public World(Vector4 _worldSize, int _worldID = 0) : this(_worldID)
         {
             worldSize = _worldSize;
             // Gérer un world avec un worldID et les paramètres de taille. Prend les param de taille par défaut si pas spécifiés.
@@ -24,11 +24,11 @@ namespace Gloriosa.Core
 
         public World(int _worldID=0)
         {
-            if (WORLDS.Find(w => w.worldID == _worldID) != null)
+            if (CURVIEW.worlds.Find(w => w.worldID == _worldID) != null)
                 return;
             worldID = _worldID;
             objectPool = new GameObjectPool(this);
-            WORLDS.Add(this);
+            CURVIEW.worlds.Add(this);
         }
 
         public Vector2 WorldToScreen()
@@ -70,7 +70,7 @@ namespace Gloriosa.Core
         /// <returns>A world instance. null if a world with this ID doesn't exist.</returns>
         public static World? GetWorld(int worldID)
         {
-            return WORLDS.Find(w => w.worldID == worldID);
+            return CURVIEW.worlds.Find(w => w.worldID == worldID);
         }
     }
 }

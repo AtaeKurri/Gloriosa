@@ -11,28 +11,28 @@ namespace Gloriosa.api
 {
     public static partial class api
     {
-        public static void LoadTexture(string filePath, string resourceName)
+        public static void LoadTexture(string filePath, string resourceName, bool shouldResourceBeLocal=false)
         {
             Texture tex = Raylib.LoadTexture(filePath);
-            _ = new Resource(resourceName, tex);
+            _ = new Resource(resourceName, tex, shouldResourceBeLocal);
         }
 
-        public static void LoadShader(string filePath, string shaderName)
+        public static void LoadShader(string filePath, string shaderName, bool shouldResourceBeLocal = false)
         {
             Shader sha = Raylib.LoadShader(filePath, shaderName);
-            _ = new Resource(shaderName, sha);
+            _ = new Resource(shaderName, sha, shouldResourceBeLocal);
         }
 
-        public static void LoadFont(string filePath, string fontName)
+        public static void LoadFont(string filePath, string fontName, bool shouldResourceBeLocal = false)
         {
             Font fnt = Raylib.LoadFont(filePath);
-            _ = new Resource(fontName, fnt);
+            _ = new Resource(fontName, fnt, shouldResourceBeLocal);
         }
 
-        public static void LoadModel(string filePath, string modelName)
+        public static void LoadModel(string filePath, string modelName, bool shouldResourceBeLocal = false)
         {
             Model mod = Raylib.LoadModel(filePath);
-            _ = new Resource(modelName, mod);
+            _ = new Resource(modelName, mod, shouldResourceBeLocal);
         }
     }
 }

@@ -19,27 +19,21 @@ namespace Gloriosa.Core
             if (global)
                 GPOOL.Add(this);
             else
-                CURVIEW.lPOOL.Add(this); // Créer ça dans la CURVIEW.
+                CURVIEW.lPOOL.Add(this);
         }
 
         /// <summary>
-        /// Finds a resource and returns it.
+        /// Finds a resource and returns it. Searches into the local view pool and then the global one if the resource is not found within the local pool.
         /// </summary>
         /// <param name="resourceName">A string used for defining a resource.</param>
         /// <returns>The resource associated with the name. Null if it doesn't exist.</returns>
-        public static T? FindResource<T>(string resourceName, bool global=true)
+        public static T? FindResource<T>(string resourceName)//, bool global=true)
         {
-            // Si global est true, chercher dans la pool globale, sinon dans la pool de CURVIEW.
-            if (global)
-            {
-                var res = GPOOL.Find(x => x.name == resourceName && x.resource is T);
-                return (T?)(res?.resource);
-            }
-            else
-            {
-                var res = CURVIEW.lPOOL.Find(x => x.name == resourceName && x.resource is T);
-                return (T?)(res?.resource);
-            }
+            // Chercher dans les deux si elle est pas trouvée dans la locale d'abord, et ensuite la globale.
+            var res = CURVIEW.lPOOL.Find(x => x.name == resourceName && x.resource is T);
+            if (res == null)
+                res = GPOOL.Find(x => x.name == resourceName && x.resource is T);
+            return (T?)(res?.resource);
         }
     }
 }
