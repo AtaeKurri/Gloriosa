@@ -45,10 +45,10 @@ namespace Gloriosa.Core
         /// Set the boundary for game objects.
         /// World-dependant.
         /// </summary>
-        /// <param name="l">Left position (global)</param>
-        /// <param name="r">Right position (global)</param>
-        /// <param name="b">Bottom position (global)</param>
-        /// <param name="t">Top position (global)</param>
+        /// <param name="l">Left position (local)</param>
+        /// <param name="r">Right position (local)</param>
+        /// <param name="b">Bottom position (local)</param>
+        /// <param name="t">Top position (local)</param>
         public void SetBounds(int l, int r, int b, int t)
         {
             worldBounds = new Vector4(l, r, b, t);

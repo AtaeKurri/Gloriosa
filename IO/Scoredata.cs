@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Gloriosa.IO
 {
+    [Serializable]
     public abstract class Scoredata
     {
+        [XmlIgnore, JsonIgnore]
         private string path;
 
         /// <summary>
@@ -30,5 +34,7 @@ namespace Gloriosa.IO
         {
             return null;
         }
+
+
     }
 }

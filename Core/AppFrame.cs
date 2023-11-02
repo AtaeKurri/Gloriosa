@@ -1,5 +1,4 @@
-﻿using Gloriosa.Core;
-using Gloriosa.Exceptions;
+﻿using Gloriosa.Exceptions;
 using Gloriosa.IO;
 using Raylib_CsLo;
 using Serilog;
@@ -10,13 +9,14 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gloriosa
+namespace Gloriosa.Core
 {
     public struct GameSettings
     {
         public Vector2 canvasSize = new Vector2(1600, 900);
         public Vector2 virtualSize = new Vector2(853, 480);
         public string windowTitle = "Gloriosa v1.0.0";
+        public int maxFPS = 60;
 
         public GameSettings()
         {
@@ -39,7 +39,6 @@ namespace Gloriosa
         private Camera2D worldCamera2D = new Camera2D();
         private Camera3D BGCamera3D = new Camera3D();
 
-        private float virtualRatio = 0.0f;
         private Rectangle sourceRect;
         private Rectangle destRect;
 
@@ -63,7 +62,9 @@ namespace Gloriosa
 
         public static List<World> getWorlds()
         {
-            return CURVIEW.worlds;
+            if (CURVIEW != null)
+                return CURVIEW.worlds;
+            return null;
         }
 
         public static Scoredata getScoredata()
@@ -75,7 +76,7 @@ namespace Gloriosa
         {
             Raylib.SetConfigFlags(ConfigFlags.FLAG_MSAA_4X_HINT | ConfigFlags.FLAG_VSYNC_HINT);
             Raylib.InitWindow((int)m_Settings.canvasSize.X, (int)m_Settings.canvasSize.Y, m_Settings.windowTitle);
-            Raylib.SetTargetFPS(60);
+            Raylib.SetTargetFPS(m_Settings.maxFPS);
 
             SetVirtualSize(m_Settings.virtualSize);
             ResetCamera();
@@ -104,10 +105,10 @@ namespace Gloriosa
 
         public void SetVirtualSize(Vector2 virtualSize)
         {
-            virtualRatio = (float)m_Settings.canvasSize.X / (float)virtualSize.X;
+            float virtualRatio = m_Settings.canvasSize.X / virtualSize.X;
             target = Raylib.LoadRenderTexture((int)virtualSize.X, (int)virtualSize.Y);
-            sourceRect = new Rectangle(0.0f, 0.0f, (float)target.texture.width, -(float)target.texture.height);
-            destRect = new Rectangle(-virtualRatio, -virtualRatio, m_Settings.canvasSize.X + (virtualRatio * 2), m_Settings.canvasSize.Y + (virtualRatio * 2));
+            sourceRect = new Rectangle(0.0f, 0.0f, target.texture.width, -(float)target.texture.height);
+            destRect = new Rectangle(-virtualRatio, -virtualRatio, m_Settings.canvasSize.X + virtualRatio * 2, m_Settings.canvasSize.Y + virtualRatio * 2);
         }
 
         private void ResetCamera()
@@ -136,7 +137,7 @@ namespace Gloriosa
             Raylib.BeginMode2D(worldCamera2D);
             DrawView();
             Raylib.EndMode2D();
-            DrawUI();
+            //DrawUI(); // Wtf is that doing here? I think I did this for debugging stuff but forgot to remove it?
             isInRenderScope = false;
             Raylib.EndTextureMode();
 
@@ -168,7 +169,8 @@ namespace Gloriosa
 
         private void DrawUI()
         {
-            Raylib.DrawFPS(10, 10);
+            if (CURVIEW != null)
+                Raylib.DrawFPS(10, 10);
         }
 
         public void CheckRenderScope()

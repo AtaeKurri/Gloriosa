@@ -1,6 +1,5 @@
 ﻿using Gloriosa.Core;
 using Gloriosa.IO;
-using Gloriosa.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;

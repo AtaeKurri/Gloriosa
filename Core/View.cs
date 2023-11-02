@@ -1,12 +1,12 @@
-﻿using Gloriosa.Core;
-using Gloriosa.Exceptions;
+﻿using Gloriosa.Exceptions;
+using Raylib_CsLo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gloriosa.Views
+namespace Gloriosa.Core
 {
     public enum ViewTypes
     {
@@ -27,7 +27,7 @@ namespace Gloriosa.Views
             if (CURVIEW != null)
             {
                 // Clear l'ancienne view, libérer les resources locales, del les GameObject, et juste libérer l'intégralité de la View précédente quoi.
-                ClearOldCURVIEW();
+                bool tmp = ClearOldCURVIEW();
             }
             viewType = type;
             CURVIEW = this;
@@ -36,14 +36,45 @@ namespace Gloriosa.Views
             Init();
         }
 
-        private void ClearOldCURVIEW()
+        private bool ClearOldCURVIEW()
         {
+            CURVIEW = null;
             foreach (GameObject gm in CURVIEW.gOP.rPool)
                 gm.Del();
-            // Faire pareil pour tous les worlds.
-            // Faire un switch pour Unload les resources selon leur type. (case resource is type) et supprimer l'élément dans la list.
-            // CURVIEW.lPOOL.Clear();
+            foreach (World w in CURVIEW.worlds)
+                foreach (GameObject go in w.objectPool.rPool)
+                    go.Del();
+            foreach (Resource r in CURVIEW.lPOOL)
+            {
+                if (r.resource is Texture)
+                    Raylib.UnloadTexture((Texture)r.resource);
+                else if (r.resource is Shader)
+                    Raylib.UnloadShader((Shader)r.resource);
+                else if (r.resource is Font)
+                    Raylib.UnloadFont((Font)r.resource);
+                else if (r.resource is Model)
+                    Raylib.UnloadModel((Model)r.resource);
+            }
+            CURVIEW.lPOOL.Clear();
             // Laisser le garbage collector s'occuper du reste.
+            return true;
+        }
+
+        /// <summary>
+        /// Creates a new world instance and adds it to the world pool.<br></br>
+        /// Will fail if the View's Type is not a Stage or if a world with the same ID already exists.
+        /// </summary>
+        /// <param name="worldID">World unique id.</param>
+        /// <returns>The world Instance. Null if failing.</returns>
+        public World CreateWorld(int worldID)
+        {
+            if (viewType != ViewTypes.Stage)
+                return null;
+            else if (worlds.Find(w => w.worldID == worldID) != null)
+                return null;
+            World w = new World(worldID);
+            worlds.Add(w);
+            return w;
         }
 
         public virtual void Init()
