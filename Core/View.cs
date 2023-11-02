@@ -3,6 +3,7 @@ using Raylib_CsLo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +32,7 @@ namespace Gloriosa.Core
             }
             viewType = type;
             CURVIEW = this;
+            worlds = new List<World>();
             gOP = new GameObjectPool();
             lPOOL = new List<Resource>();
             Init();
@@ -38,12 +40,11 @@ namespace Gloriosa.Core
 
         private bool ClearOldCURVIEW()
         {
-            CURVIEW = null;
-            foreach (GameObject gm in CURVIEW.gOP.rPool)
-                gm.Del();
+            foreach (GameObject gm in CURVIEW.gOP.m_Pool)
+                gm.status = GameObjectStatus.Free;
             foreach (World w in CURVIEW.worlds)
-                foreach (GameObject go in w.objectPool.rPool)
-                    go.Del();
+                foreach (GameObject go in w.objectPool.m_Pool)
+                    go.status = GameObjectStatus.Free;
             foreach (Resource r in CURVIEW.lPOOL)
             {
                 if (r.resource is Texture)
@@ -57,6 +58,7 @@ namespace Gloriosa.Core
             }
             CURVIEW.lPOOL.Clear();
             // Laisser le garbage collector s'occuper du reste.
+            CURVIEW = null;
             return true;
         }
 
@@ -75,6 +77,11 @@ namespace Gloriosa.Core
             World w = new World(worldID);
             worlds.Add(w);
             return w;
+        }
+
+        public static T CreateView<T>(params object[] args)
+        {
+            return (T)Activator.CreateInstance(typeof(T), args);
         }
 
         public virtual void Init()
@@ -99,6 +106,19 @@ namespace Gloriosa.Core
                     world.objectPool.DoRender(RenderModes.World);
             }
             gOP.DoRender(RenderModes.UI);
+        }
+
+        /// <summary>
+        /// Set the boundary for game objects in all existing worlds.
+        /// </summary>
+        /// <param name="l">Left position (local)</param>
+        /// <param name="r">Right position (local)</param>
+        /// <param name="b">Bottom position (local)</param>
+        /// <param name="t">Top position (local)</param>
+        public void SetBoundsAll(int l, int r, int b, int t)
+        {
+            foreach (World world in worlds)
+                world.worldBounds = new Vector4(l, r, b, t);
         }
 
         /*public GameObject CreateGO(int worldID)

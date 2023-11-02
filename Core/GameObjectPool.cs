@@ -13,8 +13,7 @@ namespace Gloriosa.Core
         const int objectLimit = 40_000;
         private World? parentWorld;
 
-        private List<GameObject> m_Pool;
-        public List<GameObject> rPool;
+        public List<GameObject> m_Pool;
         private uint nextUid = 0;
         private float nextLayer = 0.0f;
 
@@ -74,6 +73,12 @@ namespace Gloriosa.Core
             nextLayer += 0.001f;
         }
 
+        public void RemoveObject(GameObject obj)
+        {
+            m_Pool.Remove(obj);
+            obj.status = GameObjectStatus.Free;
+        }
+
         /// <summary>
         /// Check the boundary for objects. Will take World.worldBounds into account instead of World.worldSize.
         /// </summary>
@@ -94,12 +99,6 @@ namespace Gloriosa.Core
             if (obj.status == GameObjectStatus.Active)
                 return true;
             return false;
-        }
-
-        public void RemoveObject(GameObject obj)
-        {
-            m_Pool.Remove(obj);
-            obj.status = GameObjectStatus.Free;
         }
     }
 }

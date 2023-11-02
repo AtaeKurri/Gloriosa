@@ -147,7 +147,7 @@ namespace Gloriosa.Core
             if (status != GameObjectStatus.Active)
                 return false;
             status = stat;
-            if (renderMode == RenderModes.UI)
+            if (renderMode != RenderModes.UI)
                 CURVIEW.worlds[world].objectPool.RemoveObject(this);
             else
                 CURVIEW.gOP.RemoveObject(this);
@@ -160,7 +160,8 @@ namespace Gloriosa.Core
         /// <param name="other">The GameObject which collided with this one.</param>
         public virtual void Colli(GameObject other)
         {
-
+            if (!GameObjectPool.IsValid(this))
+                return;
         }
 
         /// <summary>
@@ -169,7 +170,8 @@ namespace Gloriosa.Core
         /// </summary>
         public virtual void Render()
         {
-
+            if (!GameObjectPool.IsValid(this))
+                return;
         }
 
         private void UpdateTimer()

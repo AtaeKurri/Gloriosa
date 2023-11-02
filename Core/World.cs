@@ -16,6 +16,11 @@ namespace Gloriosa.Core
         public Vector4 worldBounds;
         public Vector4 worldSize;
 
+        /// <summary>
+        /// Creates a new world inside a view.
+        /// </summary>
+        /// <param name="_worldSize">Vector4 : left, right, bottom, top</param>
+        /// <param name="_worldID">Unique ID for this world.</param>
         public World(Vector4 _worldSize, int _worldID = 0) : this(_worldID)
         {
             worldSize = _worldSize;
@@ -43,7 +48,6 @@ namespace Gloriosa.Core
 
         /// <summary>
         /// Set the boundary for game objects.
-        /// World-dependant.
         /// </summary>
         /// <param name="l">Left position (local)</param>
         /// <param name="r">Right position (local)</param>
