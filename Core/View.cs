@@ -120,25 +120,5 @@ namespace Gloriosa.Core
             foreach (World world in worlds)
                 world.worldBounds = new Vector4(l, r, b, t);
         }
-
-        /*public GameObject CreateGO(int worldID)
-        {
-            World? w = CURVIEW.worlds.Find(w => w.worldID == worldID);
-            if (w != null)
-            {
-                GameObject gm = new GameObject();
-                w.objectPool.NewGameObject(gm);
-                gm.worldScope = true;
-                return gm;
-            }
-            throw new UnknownWorldException("Cannot create a GameObject instance in an non-existing world.");
-        }
-
-        public GameObject CreateGO()
-        {
-            GameObject gm = new GameObject();
-            gOP.NewGameObject(gm);
-            return gm;
-        }*/
     }
 }

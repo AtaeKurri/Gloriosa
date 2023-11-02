@@ -1,4 +1,5 @@
-﻿using Raylib_CsLo;
+﻿using Gloriosa.Exceptions;
+using Raylib_CsLo;
 using Raylib_CsLo.InternalHelpers;
 using System;
 using System.Collections.Generic;
@@ -98,8 +99,9 @@ namespace Gloriosa.Core
             else
             {
                 World? w = CURVIEW.worlds.Find(w => w.worldID == worldID);
-                if (w != null)
-                    w.objectPool.NewGameObject(this);
+                if (w == null)
+                    throw new UnknownWorldException("Cannot create a GameObject instance in a non-existing world.");
+                w.objectPool.NewGameObject(this);
                 worldScope = true;
             }
         }
