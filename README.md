@@ -1,6 +1,4 @@
 # Gloriosa
-[![.NET](https://github.com/AtaeKurri/Gloriosa/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AtaeKurri/Gloriosa/actions/workflows/dotnet.yml)
-
 ## What is this?
 Gloriosa is a game framework made for danmaku-type games.<br>
 It still is in an early development phase and is not meant to be used for full games.
