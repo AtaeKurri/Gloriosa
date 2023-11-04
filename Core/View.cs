@@ -27,7 +27,6 @@ namespace Gloriosa.Core
         {
             if (CURVIEW != null)
             {
-                // Clear l'ancienne view, libérer les resources locales, del les GameObject, et juste libérer l'intégralité de la View précédente quoi.
                 bool tmp = ClearOldCURVIEW();
             }
             viewType = type;

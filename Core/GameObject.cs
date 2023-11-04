@@ -48,6 +48,13 @@ namespace Gloriosa.Core
         UI
     }
 
+    public enum CollisionShape
+    {
+        Rectangle,
+        Circle,
+        Polygon /// WARNING: NOT SUPPORTED
+    }
+
     public class GameObject
     {
         public GameObjectStatus status = GameObjectStatus.Active;
@@ -55,14 +62,14 @@ namespace Gloriosa.Core
 
         public int world;
 
-        public Vector2 lastXY = Vector2.Zero;
-        public Vector2 XY = Vector2.Zero;
+        public Vector2 lastPosition = Vector2.Zero;
+        public Vector2 position = Vector2.Zero;
 
         public GameObjectGroup group = GameObjectGroup.GHOST;
         public bool bound = true;
-        public bool colli = true;
-        public bool colliRect = false;
-        public Vector2 colliAB = Vector2.Zero;
+        public bool checkColli = true;
+        public bool colliIsRect = false;
+        public Vector2 colliSize = Vector2.Zero;
 
         public GameObjectLayer baseLayer = GameObjectLayer.ENEMIES;
         public float layer = 0.0f;
@@ -72,10 +79,11 @@ namespace Gloriosa.Core
         public BlendMode blendMode = BlendMode.BLEND_ALPHA;
 
         public ulong timer = 0;
-        public bool hide = false;
-        public bool navi = false;
+        public bool hidden = false;
+        public bool autoRot = false;
         public bool ignorePause = false;
         public bool paused = false;
+        public bool worldPaused = false;
 
         public bool onTop = false;
         public Texture? img = null;
@@ -106,6 +114,19 @@ namespace Gloriosa.Core
             }
         }
 
+        /// <summary>
+        /// Should pause it returning true.
+        /// </summary>
+        /// <returns></returns>
+        private bool ShouldPause()
+        {
+            if (ignorePause && !GameObjectPool.IsValid(this))
+                return false;
+            if (worldPaused || paused)
+                return true;
+            return false;
+        }
+
         public virtual void Init()
         {
 
@@ -117,7 +138,7 @@ namespace Gloriosa.Core
         /// <param name="deltaTime">Time (in seconds) since the last frame.</param>
         public virtual void Frame(float deltaTime)
         {
-            if (paused || !GameObjectPool.IsValid(this))
+            if (ShouldPause())
                 return;
 
             rot += omega;
@@ -157,12 +178,13 @@ namespace Gloriosa.Core
         }
 
         /// <summary>
-        /// This method is called when another object collides with this one.
+        /// This method is called when another object collides with this one.<br></br>
+        /// Won't detect collision if the object and/or the world is paused.
         /// </summary>
         /// <param name="other">The GameObject which collided with this one.</param>
         public virtual void Colli(GameObject other)
         {
-            if (!GameObjectPool.IsValid(this))
+            if (ShouldPause())
                 return;
         }
 
@@ -174,6 +196,15 @@ namespace Gloriosa.Core
         {
             if (!GameObjectPool.IsValid(this))
                 return;
+            RenderCollisionShape(); // A retirer dans la version finale, c'est pour debuguer.
+        }
+
+        /// <summary>
+        /// Render the collision shape of the object, intended for debugging purposes.
+        /// </summary>
+        public void RenderCollisionShape()
+        {
+
         }
 
         private void UpdateTimer()
@@ -184,7 +215,7 @@ namespace Gloriosa.Core
         public bool IsInRect(int l, int r, int b, int t)
         {
             Debug.Assert(r >= l && t >= b);
-            return (XY.X >= l && XY.X <= r && XY.Y >= b && XY.Y <= t);
+            return (position.X >= l && position.X <= r && position.Y >= b && position.Y <= t);
         }
 
         /// <summary>
@@ -194,6 +225,37 @@ namespace Gloriosa.Core
         public void SetRenderMode(RenderModes rm)
         {
             renderMode = rm;
+        }
+
+        /// <summary>
+        /// Sets the collision shape for the object. 
+        /// </summary>
+        /// <param name="shape">The shape of this object's collider</param>
+        /// <param name="args">Arguments for the collision shape.</param>
+        public void SetCollisionShape(CollisionShape shape, params object[] args)
+        {
+
+        }
+
+        public void CollisionCheck(GameObject other)
+        {
+            if (colliIsRect && other.colliIsRect)
+            {
+                if ((position.X < (other.position.X + other.colliSize.X) && (position.X + colliSize.X) > other.position.X) &&
+                    (position.Y < (other.position.Y + other.colliSize.Y) && (position.Y + colliSize.Y) > other.position.Y))
+                {
+                    Colli(other);
+                    return;
+                }
+            }
+            else if (colliIsRect && !other.colliIsRect)
+            {
+                // Faire le check si l'un est rectangle est l'autre ovale.
+            }
+            else
+            {
+                // Faire le check si les deux sont ovales.
+            }
         }
     }
 }

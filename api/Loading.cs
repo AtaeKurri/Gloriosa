@@ -26,6 +26,7 @@ namespace Gloriosa.api
         public static void LoadFont(string filePath, string fontName, bool shouldResourceBeLocal = false)
         {
             Font fnt = Raylib.LoadFont(filePath);
+            Raylib.SetTextureFilter(fnt.texture, TextureFilter.TEXTURE_FILTER_BILINEAR);
             _ = new Resource(fontName, fnt, shouldResourceBeLocal);
         }
 

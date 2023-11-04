@@ -12,9 +12,11 @@ namespace Gloriosa.Core
     {
         internal GameObjectPool objectPool;
         public int worldID = 0;
+        // 0, 0 is at the top-left corner of the window.
+        public Vector2 positionOnScreen = new Vector2(6, 16);
         public bool paused = false;
         public Vector4 worldBounds;
-        public Vector4 worldSize;
+        public Vector4 worldSize = new Vector4(-192, 192, -224, 224);
 
         /// <summary>
         /// Creates a new world inside a view.
@@ -24,9 +26,13 @@ namespace Gloriosa.Core
         public World(Vector4 _worldSize, int _worldID = 0) : this(_worldID)
         {
             worldSize = _worldSize;
-            // Gérer un world avec un worldID et les paramètres de taille. Prend les param de taille par défaut si pas spécifiés.
+            // Génère un world avec un worldID et les paramètres de taille. Prend les param de taille par défaut si pas spécifiés.
         }
 
+        /// <summary>
+        /// Creates a new world inside a view. Takes default size parameters.
+        /// </summary>
+        /// <param name="_worldID">Unique ID for this world.</param>
         public World(int _worldID=0)
         {
             if (CURVIEW.worlds.Find(w => w.worldID == _worldID) != null)
@@ -65,6 +71,8 @@ namespace Gloriosa.Core
         public void PauseWorld(bool pausing)
         {
             paused = pausing;
+            foreach (GameObject go in objectPool.m_Pool)
+                go.worldPaused = paused;
         }
 
         /// <summary>
@@ -75,6 +83,31 @@ namespace Gloriosa.Core
         public static World? GetWorld(int worldID)
         {
             return CURVIEW.worlds.Find(w => w.worldID == worldID);
+        }
+
+        public void DoCollisionChecks()
+        {
+            CollisionChecks(GameObjectGroup.PLAYER, GameObjectGroup.ENEMY_BULLET);
+            CollisionChecks(GameObjectGroup.PLAYER, GameObjectGroup.INDES);
+            CollisionChecks(GameObjectGroup.PLAYER, GameObjectGroup.ENEMY);
+            CollisionChecks(GameObjectGroup.ENEMY, GameObjectGroup.PLAYER_BULLET);
+            CollisionChecks(GameObjectGroup.ITEM, GameObjectGroup.PLAYER);
+        }
+
+        public void CollisionChecks(GameObjectGroup groupA, GameObjectGroup groupB)
+        {
+            foreach (GameObject goA in objectPool.m_Pool.FindAll(x => x.group == groupA))
+            {
+                if (!goA.checkColli)
+                    return;
+
+                foreach (GameObject goB in objectPool.m_Pool.FindAll(y => y.group == groupB))
+                {
+                    if (!goB.checkColli)
+                        continue;
+                    goA.CollisionCheck(goB);
+                }
+            }
         }
     }
 }

@@ -25,10 +25,9 @@ namespace Gloriosa.Core
             m_Pool = new List<GameObject>();
         }
 
-        public GameObjectPool(World world)
+        public GameObjectPool(World world) : this()
         {
             parentWorld = world;
-            m_Pool = new List<GameObject>();
         }
 
         public void ResetPool()
@@ -47,11 +46,14 @@ namespace Gloriosa.Core
                 gm.Frame(dt);
             }
             isProcessingFrame = false;
+
+            if (parentWorld != null)
+                parentWorld.DoCollisionChecks();
         }
         public void DoRender(RenderModes renderMode)
         {
             isRendering = true;
-            foreach (GameObject gm in m_Pool.FindAll(x => x.renderMode == renderMode && !x.hide))
+            foreach (GameObject gm in m_Pool.FindAll(x => x.renderMode == renderMode && !x.hidden))
                 gm.Render();
             isRendering = false;
         }
@@ -90,8 +92,8 @@ namespace Gloriosa.Core
                 return true;
             Debug.Assert(parentWorld.worldBounds.Y >= parentWorld.worldBounds.X && parentWorld.worldBounds.W >= parentWorld.worldBounds.Z);
 
-            return (obj.XY.X >= parentWorld.worldBounds.X && obj.XY.X <= parentWorld.worldBounds.Y
-                && obj.XY.Y >= parentWorld.worldBounds.Z && obj.XY.Y <= parentWorld.worldBounds.W);
+            return (obj.position.X >= parentWorld.worldBounds.X && obj.position.X <= parentWorld.worldBounds.Y
+                && obj.position.Y >= parentWorld.worldBounds.Z && obj.position.Y <= parentWorld.worldBounds.W);
         }
 
         public static bool IsValid(GameObject obj)

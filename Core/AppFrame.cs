@@ -109,6 +109,7 @@ namespace Gloriosa.Core
             target = Raylib.LoadRenderTexture((int)virtualSize.X, (int)virtualSize.Y);
             sourceRect = new Rectangle(0.0f, 0.0f, target.texture.width, -(float)target.texture.height);
             destRect = new Rectangle(-virtualRatio, -virtualRatio, m_Settings.canvasSize.X + virtualRatio * 2, m_Settings.canvasSize.Y + virtualRatio * 2);
+            //destRect = new Rectangle(0.0f, 0.0f, m_Settings.canvasSize.X, m_Settings.canvasSize.Y);
         }
 
         private void ResetCamera()
